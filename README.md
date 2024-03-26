@@ -1,12 +1,12 @@
 # homebrew-tap
 My homebrew tap for custom formulas.
-
+https://brew.sh/
 
 ### ffmpeg
 
 Same as  `homebrew-ffmpeg/ffmpeg/ffmpeg` , with the exception that it uses the full featured webp tools (`skyzyx/webp/webp-full`) , instead of the crippled homebrew default. (which strips your metadata, for example).
 
-###### Installation: 
+#### Installation: 
 
 If you installed any other ffmpeg formula, uninstall it:
 

@@ -191,7 +191,7 @@ class Ffmpeg < Formula
     args << "--enable-libtwolame" if build.with? "two-lame"
     args << "--enable-libvidstab" if build.with? "libvidstab"
     args << "--enable-libvmaf" if build.with? "libvmaf"
-    args << "--enable-libwebp" if build.with? "webp"
+    args << "--enable-libwebp" if build.with? "skyzyx/webp/webp-full"
     args << "--enable-libxml2" if build.with? "libxml2"
     args << "--enable-libxvid" if build.with? "xvid"
     args << "--enable-libzimg" if build.with? "zimg"
