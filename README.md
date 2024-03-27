@@ -1,10 +1,14 @@
 # homebrew-tap
-My homebrew tap for custom formulas.
-https://brew.sh/
+My custom homebrew tap and formulas.
 
+- - -
+## Formulas:
 ### ffmpeg
 
-Same as  `homebrew-ffmpeg/ffmpeg/ffmpeg` , with the exception that it uses the full featured webp tools (`skyzyx/webp/webp-full`) , instead of the crippled homebrew default. (which strips your metadata, for example).
+This formula is almost the same as  `homebrew-ffmpeg/ffmpeg/ffmpeg` , except:
+
+1) it uses the full featured webp tools (`skyzyx/webp/webp-full`) , instead of the crippled homebrew default. (which strips your metadata, for example).
+2) --enable-libflite was removed because there is no such homebrew package and it generates errors.
 
 #### Installation: 
 
@@ -21,7 +25,11 @@ brew tap exekutive/tap
 brew install exekutive/tap/ffmpeg
 ```
 
+
 Extra options are documented here: 
 https://github.com/homebrew-ffmpeg/homebrew-ffmpeg
 
 
+- - -
+
+Homebrew package manager for MacOS: https://brew.sh/
