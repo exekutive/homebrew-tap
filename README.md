@@ -8,7 +8,7 @@ My custom homebrew tap and formulas.
 This formula is almost the same as  `homebrew-ffmpeg/ffmpeg/ffmpeg` , except:
 
 1) it uses the full featured webp tools (`skyzyx/webp/webp-full`) , instead of the crippled homebrew default. (which strips your metadata, for example).
-2) --enable-libflite was removed because there is no such homebrew package and it generates errors.
+2) the option `—enable-libflite` was removed because there is no such homebrew package and it generates errors.
 
 #### Installation: 
 
