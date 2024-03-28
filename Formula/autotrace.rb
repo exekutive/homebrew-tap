@@ -23,7 +23,7 @@ class Autotrace < Formula
       "--mandir=#{man}",
     ]
 
-    args << "--without-magick" if build.without? 'imagemagick'
+    args << "--without-magick" if build.without? "imagemagick"
 
     system "./configure", *args
     system `"make", "install"`
