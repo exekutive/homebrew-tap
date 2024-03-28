@@ -26,6 +26,7 @@ class Autotrace < Formula
     args << "--without-magick" if build.without? "imagemagick"
 
     system "./configure", *args
-    system `"make", "install"`
+    system "make", "install"
+
   end
 end
