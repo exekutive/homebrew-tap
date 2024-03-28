@@ -5,6 +5,7 @@ class Autotrace < Formula
   sha256 "5a1a923c3335dfd7cbcccb2bbd4cc3d68cafe7713686a2f46a1591ed8a92aff6"
 
   depends_on "imagemagick" => :recommended
+  depends_on "pstoedit"
 
   # Issue 16569: Use MacPorts patch to port input-png.c to libpng 1.5.
   # Fix underquoted m4
