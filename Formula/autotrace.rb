@@ -10,7 +10,7 @@ class Autotrace < Formula
   # Fix underquoted m4
   def patches
     { :p0 => [
-      "https://trac.macports.org/export/100575/trunk/dports/graphics/autotrace/files/patch-libpng-1.5.diff'"
+      "https://trac.macports.org/export/100575/trunk/dports/graphics/autotrace/files/patch-libpng-1.5.diff",
       "https://trac.macports.org/export/77101/trunk/dports/graphics/autotrace/files/patch-autotrace.m4.diff"
     ] }
   end
