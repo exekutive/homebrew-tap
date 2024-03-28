@@ -3,7 +3,7 @@ require 'formula'
 class Autotrace < Formula
   homepage 'http://autotrace.sourceforge.net'
   url 'http://downloads.sourceforge.net/project/autotrace/AutoTrace/0.31.1/autotrace-0.31.1.tar.gz'
-  sha1 '679e4912528030b86f23db5b99e60f8e7df883fd'
+  sha256 '5a1a923c3335dfd7cbcccb2bbd4cc3d68cafe7713686a2f46a1591ed8a92aff6'
 
   depends_on 'imagemagick' => :recommended
 
