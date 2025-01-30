@@ -1,12 +1,23 @@
 class Ffmpeg < Formula
   desc "Play, record, convert, and stream audio and video"
   homepage "https://ffmpeg.org/"
-  url "https://ffmpeg.org/releases/ffmpeg-7.0.tar.xz"
-  version "7.0-with-options" # to distinguish from homebrew-core's ffmpeg
-  sha256 "4426a94dd2c814945456600c8adfc402bee65ec14a70e8c531ec9a2cd651da7b"
   license "GPL-2.0-or-later"
-  revision 3
+  revision 4
   head "https://github.com/FFmpeg/FFmpeg.git", branch: "master"
+
+  stable do
+    url "https://ffmpeg.org/releases/ffmpeg-7.1.tar.xz"
+    version "7.1-with-options" # to distinguish from homebrew-core's ffmpeg
+    sha256 "40973d44970dbc83ef302b0609f2e74982be2d85916dd2ee7472d30678a7abe6"
+
+    # Fix for x264 segfault
+    # https://github.com/Homebrew/homebrew-core/pull/202680/commits/4997de5addc10c74daf5a492dbea4df63af9b8ad
+    # https://github.com/homebrew-ffmpeg/homebrew-ffmpeg/issues/179
+    patch do
+      url "https://github.com/FFmpeg/FFmpeg/commit/099f88b8641dfc299f3896d17d9addc5b9ae7799.patch?full_index=1"
+      sha256 "43677660210523f0eb6db93c4ac9c7943c959116951a5859e6f14568b4392a59"
+    end
+  end
 
   option "with-chromaprint", "Enable the Chromaprint audio fingerprinting library"
   option "with-decklink", "Enable DeckLink support"
@@ -106,8 +117,16 @@ class Ffmpeg < Formula
   uses_from_macos "bzip2"
   uses_from_macos "zlib"
 
+  on_macos do
+    depends_on "libarchive"
+    depends_on "libogg"
+    depends_on "libsamplerate"
+  end
+
   on_linux do
     depends_on "alsa-lib"
+    depends_on "libdrm"
+    depends_on "libxext"
     depends_on "libxv"
   end
 
@@ -125,9 +144,7 @@ class Ffmpeg < Formula
   end
 
   def install
-    # The new linker leads to duplicate symbol issue https://github.com/homebrew-ffmpeg/homebrew-ffmpeg/issues/140
-    ENV.append "LDFLAGS", "-Wl,-ld_classic" if DevelopmentTools.clang_build_version >= 1500
-
+    
     args = %W[
       --prefix=#{prefix}
       --enable-shared
@@ -152,7 +169,9 @@ class Ffmpeg < Formula
       --enable-demuxer=dash
     ]
 
-    if OS.mac?
+    
+    if OS.mac?      
+      args << "--enable-openal" if build.with? "openal-soft"
       args << "--enable-opencl"
       args << "--enable-audiotoolbox"
       args << "--enable-videotoolbox"
@@ -202,17 +221,28 @@ class Ffmpeg < Formula
     # the "--enable-nonfree" flag, which produces unredistributable libraries
     args << "--enable-nonfree" if build.with?("decklink") || build.with?("fdk-aac") || build.with?("openssl")
 
-    if build.with? "decklink"
+   if build.with? "decklink"
       args << "--enable-decklink"
       args << "--extra-cflags=-I#{HOMEBREW_PREFIX}/include"
       args << "--extra-ldflags=-L#{HOMEBREW_PREFIX}/include"
       mv "VERSION", "VERSION.txt"
     end
 
+    if build.with? "dvd"
+      args << "--enable-libdvdnav"
+      args << "--enable-libdvdread"
+    end
+
     if build.with? "jack"
       ENV.prepend_path "PKG_CONFIG_PATH", Formula["jack"].opt_lib/"pkgconfig"
       args << "--enable-libjack"
       args << "--enable-indev=jack"
+    end
+
+    if build.with? "libplacebo"
+      ENV.prepend_path "PKG_CONFIG_PATH", Formula["libplacebo"].opt_lib/"pkgconfig"
+      args << "--enable-libplacebo"
+      args << "--enable-vulkan"
     end
 
     if build.with? "libzvbi"
@@ -232,8 +262,8 @@ class Ffmpeg < Formula
 
     # Build and install additional FFmpeg tools
     system "make", "alltools"
-    bin.install Dir["tools/*"].select { |f| File.executable? f }
-    mv bin/"python", pkgshare/"python", force: true
+    bin.install (buildpath/"tools").children.select { |f| f.file? && f.executable? }
+    pkgshare.install buildpath/"tools/python"
 
     if build.with? "tesseract"
       opoo <<~EOS
